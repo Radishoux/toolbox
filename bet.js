@@ -408,7 +408,7 @@ function apreryeartoday(day) {
 }
 
 
-function scrapmomo() {
+function scrapmomo(mboxprice, mboxper100hashrate) {
     fetch('https://nftapi.bitsplus.cn/auction/search/BNB?page=1&limit=10000&category=&vType=&sort=price&pType=').then(function(response) {
         return response.json();
     }).then(function(r) {
@@ -438,7 +438,7 @@ function scrapmomo() {
                 rares[i].fullnowPrice = rares[i].nowPrice + fams[rares[i].prototype.toString().slice(1)][1][0].nowPrice + fams[rares[i].prototype.toString().slice(1)][2][0].nowPrice + fams[rares[i].prototype.toString().slice(1)][3][0].nowPrice;
                 rares[i].fullpower = rares[i].hashrate + 306;
                 rares[i].worth = rares[i].fullpower / rares[i].fullnowPrice;
-                rares[i].daily = (((rares[i].fullpower / 100) * 1.2) * 4.4)
+                rares[i].daily = (((rares[i].fullpower / 100) * mboxper100hashrate) * mboxprice)
                 rares[i].renta = rares[i].fullnowPrice / rares[i].daily
             }
         }
@@ -455,7 +455,7 @@ function scrapmomo() {
 
     });
 }
-scrapmomo();
+scrapmomo(9, 1.2);
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -464,7 +464,7 @@ scrapmomo();
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
-function scrapzoogame() {
+function scrapzoogame(zooprice, zooper100hashrate, alreadygot) {
 
     fetch('https://api.zoogame.finance/api/zoo/market?nftName=&team=&rarity=&page=1&perPage=10000&type=1&currentPage=1').then(function(response) {
         return response.json();
@@ -479,6 +479,8 @@ function scrapzoogame() {
             else
                 solo.push(r.data[i]);
         }
+
+        solo = solo.filter(z => alreadygot.indexOf(z.team) == -1);
 
         var fams = {}
         var epics = [];
@@ -515,7 +517,7 @@ function scrapzoogame() {
                 epics[i].fullprice = epics[i].price + fams[epics[i].team].Junk[0].price + fams[epics[i].team].Normal[0].price + fams[epics[i].team].Rare[0].price;
                 epics[i].fullpower = epics[i].power + 57;
                 epics[i].worth = epics[i].fullpower / epics[i].fullprice;
-                epics[i].journa = (((epics[i].fullpower / 100) * 26) * 0.58)
+                epics[i].journa = (((epics[i].fullpower / 100) * zooper100hashrate) * zooprice)
                 epics[i].renta = epics[i].fullprice / epics[i].journa
             }
         }
@@ -532,11 +534,9 @@ function scrapzoogame() {
 
     })
 }
-scrapzoogame();
-
+scrapzoogame(1.47, 14, ["Pelicans", "Nuggets", "Tom & Jerry", "King Kong", "Doggy", "Heavy Weight", "Akita", "Ice Age"]);
 
 /////////////////////////////
-
 
 function journa(journapar100momo, journapar100zoo, minemomo, minezoo, bpjour) {
 
@@ -556,19 +556,69 @@ function journa(journapar100momo, journapar100zoo, minemomo, minezoo, bpjour) {
         var zoo = r.data.find(element => element.id == 11020)
         var bp = r.data.find(element => element.id == 10904)
         var j = 0;
-        j += (mbox.quote.USD.price * ((minemomo / 100) * journapar100momo));
-        j += (zoo.quote.USD.price * ((minezoo / 100) * journapar100zoo));
-        j += (bp.quote.USD.price * bpjour);
+        var jmbox = 0;
+        var jzoo = 0;
+        var jbp = 0;
+        jmbox += (mbox.quote.USD.price * ((minemomo / 100) * journapar100momo));
+        jzoo += (zoo.quote.USD.price * ((minezoo / 100) * journapar100zoo));
+        jbp += (bp.quote.USD.price * bpjour);
+        j += jmbox + jzoo + jbp;
+        console.log("mbox", mbox.quote.USD.price, jmbox);
+        console.log("zoo", zoo.quote.USD.price, jzoo);
+        console.log("bp", bp.quote.USD.price, jbp);
         console.log(j);
     })
 
 }
 
-journa(1.26, 22.7592, 2198, 248, 30);
-
-
-
-
-
+journa(1.22, 14, 2198, 626, 25);
 
 //////////////////
+
+function zookeyworth() {
+    var keyworth = 0;
+
+    function sortp(a, b) {
+        if (a.price > b.price)
+            return 1;
+        if (a.price < b.price)
+            return -1;
+        return 0;
+    }
+
+    function postfetch(d, ratio) {
+        for (let i = 0; i < d.data.length; i++)
+            d.data[i].price /= 1000000000000000000;
+        d.data.sort(sortp)
+        return (d.data[0].price * ratio);
+    }
+
+    fetch('https://api.zoogame.finance/api/zoo/market?nftName=&team=&rarity=junk&page=1&perPage=10000&type=1&currentPage=1').then(function(response) {
+        return response.json();
+    }).then(function(r) {
+        keyworth += postfetch(r, 54.94)
+    })
+    fetch('https://api.zoogame.finance/api/zoo/market?nftName=&team=&rarity=normal&page=1&perPage=10000&type=1&currentPage=1').then(function(response) {
+        return response.json();
+    }).then(function(r) {
+        keyworth += postfetch(r, 27.47)
+    })
+    fetch('https://api.zoogame.finance/api/zoo/market?nftName=&team=&rarity=rare&page=1&perPage=10000&type=1&currentPage=1').then(function(response) {
+        return response.json();
+    }).then(function(r) {
+        keyworth += postfetch(r, 13.73)
+    })
+    fetch('https://api.zoogame.finance/api/zoo/market?nftName=&team=&rarity=epic&page=1&perPage=10000&type=1&currentPage=1').then(function(response) {
+        return response.json();
+    }).then(function(r) {
+        keyworth += postfetch(r, 3.43)
+    })
+    fetch('https://api.zoogame.finance/api/zoo/market?nftName=&team=&rarity=legendary&page=1&perPage=10000&type=1&currentPage=1').then(function(response) {
+        return response.json();
+    }).then(function(r) {
+        keyworth += postfetch(r, 0.43)
+    })
+    setTimeout(function() { console.log(keyworth / 100); }, 5000)
+}
+
+zookeyworth();
