@@ -464,7 +464,7 @@ scrapmomo(9, 1.2);
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
-function scrapzoogame(zooprice, zooper100hashrate, alreadygot) {
+function scrapZooGame(zooprice, zooper100hashrate, alreadygot) {
 
     fetch('https://api.zoogame.finance/api/zoo/market?nftName=&team=&rarity=&page=1&perPage=10000&type=1&currentPage=1').then(function(response) {
         return response.json();
@@ -534,7 +534,8 @@ function scrapzoogame(zooprice, zooper100hashrate, alreadygot) {
 
     })
 }
-scrapzoogame(1.47, 14, ["Pelicans", "Nuggets", "Tom & Jerry", "King Kong", "Doggy", "Heavy Weight", "Akita", "Ice Age"]);
+
+scrapZooGame(1.47, 14, ["Pelicans", "Nuggets", "Tom & Jerry", "King Kong", "Doggy", "Heavy Weight", "Akita", "Ice Age"]);
 
 /////////////////////////////
 
@@ -588,7 +589,6 @@ function zooKeyWorth() {
     fetch('https://api2.zoogame.finance/api/zoo/market?price=asc&page=1&perPage=1&currentPage=1&rarity=junk').then(function(response) {
         return response.json();
     }).then(function(r) {
-        console.log(r);
         keyworth += postfetch(r, 54.94)
     })
     fetch('https://api2.zoogame.finance/api/zoo/market?price=asc&page=1&perPage=1&currentPage=1&rarity=normal').then(function(response) {
