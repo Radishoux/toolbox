@@ -538,10 +538,10 @@ scrapzoogame(1.47, 14, ["Pelicans", "Nuggets", "Tom & Jerry", "King Kong", "Dogg
 
 /////////////////////////////
 
-function journa(journapar100momo, journapar100zoo, minemomo, minezoo, bpjour) {
+function journa(journapar100momo, journapar100zoo, minemomo, minezoo, bpjour, key) {
 
     var myHeaders = new Headers();
-    myHeaders.append("X-CMC_PRO_API_KEY", "e79ea742-9590-42f5-8250-73453a44673f");
+    myHeaders.append("X-CMC_PRO_API_KEY", key);
 
     var requestOptions = {
         method: 'GET',
@@ -571,54 +571,90 @@ function journa(journapar100momo, journapar100zoo, minemomo, minezoo, bpjour) {
 
 }
 
-journa(1.22, 14, 2198, 626, 25);
+journa();
 
 //////////////////
 
-function zookeyworth() {
+function zooKeyWorth() {
     var keyworth = 0;
 
-    function sortp(a, b) {
-        if (a.price > b.price)
-            return 1;
-        if (a.price < b.price)
-            return -1;
-        return 0;
-    }
-
     function postfetch(d, ratio) {
-        for (let i = 0; i < d.data.length; i++)
-            d.data[i].price /= 1000000000000000000;
-        d.data.sort(sortp)
-        return (d.data[0].price * ratio);
+        d = d.data[0];
+        d.price /= 1000000000000000000;
+        console.log(d.price, ratio, d.price * ratio)
+        return (d.price * ratio);
     }
 
-    fetch('https://api.zoogame.finance/api/zoo/market?nftName=&team=&rarity=junk&page=1&perPage=10000&type=1&currentPage=1').then(function(response) {
+    fetch('https://api2.zoogame.finance/api/zoo/market?price=asc&page=1&perPage=1&currentPage=1&rarity=junk').then(function(response) {
         return response.json();
     }).then(function(r) {
+        console.log(r);
         keyworth += postfetch(r, 54.94)
     })
-    fetch('https://api.zoogame.finance/api/zoo/market?nftName=&team=&rarity=normal&page=1&perPage=10000&type=1&currentPage=1').then(function(response) {
+    fetch('https://api2.zoogame.finance/api/zoo/market?price=asc&page=1&perPage=1&currentPage=1&rarity=normal').then(function(response) {
         return response.json();
     }).then(function(r) {
         keyworth += postfetch(r, 27.47)
     })
-    fetch('https://api.zoogame.finance/api/zoo/market?nftName=&team=&rarity=rare&page=1&perPage=10000&type=1&currentPage=1').then(function(response) {
+    fetch('https://api2.zoogame.finance/api/zoo/market?price=asc&page=1&perPage=1&currentPage=1&rarity=rare').then(function(response) {
         return response.json();
     }).then(function(r) {
         keyworth += postfetch(r, 13.73)
     })
-    fetch('https://api.zoogame.finance/api/zoo/market?nftName=&team=&rarity=epic&page=1&perPage=10000&type=1&currentPage=1').then(function(response) {
+    fetch('https://api2.zoogame.finance/api/zoo/market?price=asc&page=1&perPage=1&currentPage=1&rarity=epic').then(function(response) {
         return response.json();
     }).then(function(r) {
         keyworth += postfetch(r, 3.43)
     })
-    fetch('https://api.zoogame.finance/api/zoo/market?nftName=&team=&rarity=legendary&page=1&perPage=10000&type=1&currentPage=1').then(function(response) {
+    fetch('https://api2.zoogame.finance/api/zoo/market?price=asc&page=1&perPage=1&currentPage=1&rarity=legendary').then(function(response) {
         return response.json();
     }).then(function(r) {
         keyworth += postfetch(r, 0.43)
     })
-    setTimeout(function() { console.log(keyworth / 100); }, 5000)
+    setTimeout(function() { console.log(keyworth / 100 + "$"); }, 5000)
 }
 
-zookeyworth();
+zooKeyWorth();
+
+
+/////////////////////////////////////////
+
+function moboxKeyWorth() {
+    var keyworth = 0;
+
+    function postfetch(d, ratio) {
+        d = d.list[0];
+        d.endPrice /= 1000000000;
+        console.log(d.endPrice, ratio, d.endPrice * ratio);
+        return (d.endPrice * ratio);
+    }
+
+    fetch('https://nftapi.bitsplus.cn/auction/search/BNB?page=1&limit=1&category=&sort=price&pType=&vType=1').then(function(response) {
+        return response.json();
+    }).then(function(r) {
+        keyworth += postfetch(r, 50)
+    })
+    fetch('https://nftapi.bitsplus.cn/auction/search/BNB?page=1&limit=1&category=&sort=price&pType=&vType=2').then(function(response) {
+        return response.json();
+    }).then(function(r) {
+        keyworth += postfetch(r, 35)
+    })
+    fetch('https://nftapi.bitsplus.cn/auction/search/BNB?page=1&limit=1&category=&sort=price&pType=&vType=3').then(function(response) {
+        return response.json();
+    }).then(function(r) {
+        keyworth += postfetch(r, 12)
+    })
+    fetch('https://nftapi.bitsplus.cn/auction/search/BNB?page=1&limit=1&category=&sort=price&pType=&vType=4').then(function(response) {
+        return response.json();
+    }).then(function(r) {
+        keyworth += postfetch(r, 2.5)
+    })
+    fetch('https://nftapi.bitsplus.cn/auction/search/BNB?page=1&limit=1&category=&sort=price&pType=&vType=5').then(function(response) {
+        return response.json();
+    }).then(function(r) {
+        keyworth += postfetch(r, 0.5)
+    })
+    setTimeout(function() { console.log(keyworth / 100 + "$"); }, 5000)
+}
+
+moboxKeyWorth();
