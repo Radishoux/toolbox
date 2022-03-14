@@ -54,6 +54,14 @@ function toolbox() {
             return previousValue + currentValue
         }, initialValue) //16
 
+    var postReduceRight = [
+        [0, 1],
+        [2, 3],
+        [4, 5]
+    ].reduceRight(
+        (accumulator, currentValue) => accumulator.concat(currentValue)
+    );
+
     var phrase = "0";
     if (isNaN(phrase)) {
         console.log('<<', phrase, '>>', 'is not a Number!');
@@ -66,13 +74,22 @@ function toolbox() {
     console.log(postMap); // [2, 4, 6, 8, 10]
     console.log(postFilter); // [2, 4, 6, 8]
     console.log(postReduce); //16
+    console.log(postReduceRight); //[ 4, 5, 2, 3, 0, 1 ]
+
+    console.log(" ");
+
     console.log(10 / 0); //Infinity
     console.log(10 / "Apple"); //NaN
     console.log((10 / 0) == Infinity); //true
     console.log((10 / "Apple") == NaN); //false
+
+    console.log(" ");
     console.log(escape("äöü")); // "%E4%F6%FC"
-
-
+    console.log(unescape("%E4%F6%FC")); // "äöü"
+    console.log(encodeURI("https://mozilla.org/?x=äöü")); // "https://mozilla.org/?x=%C3%A4%C3%B6%C3%BC"
+    console.log(decodeURI("https://mozilla.org/?x=%C3%A4%C3%B6%C3%BC")); // "https://mozilla.org/?x=äöü"
+    console.log(encodeURIComponent("https://mozilla.org/?x=äöü")); // "https://mozilla.org/?x=%C3%A4%C3%B6%C3%BC"
+    console.log(decodeURIComponent("https://mozilla.org/?x=%C3%A4%C3%B6%C3%BC")); //"https://mozilla.org/?x=äöü"
     // console.log(postTimeout); Timeout {...}
     // console.log(postPromise); Promise { <pending> }
 }
